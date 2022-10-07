@@ -117,7 +117,7 @@ def getUnet3d_4(input_shape, pool_size, conv_size, initial_learning_rate, mgpu):
 ## ----------------------------------------
 
 def getUnet3d_4_ext(input_shape, pool_size, conv_size, initial_learning_rate, mgpu, drop_out):
-  print('Use extended MGPU 4 model')
+  print(f'Use extended MGPU {mgpu} model')
   inputs = Input(input_shape, name='model_input')
   conv1 = Conv3D(32, conv_size, activation='relu', padding='same', name='conv_1_1')(inputs)
   norm1 = BatchNormalization(axis=4, name='norm_1_1')(conv1)
@@ -178,14 +178,14 @@ def getUnet3d_4_ext(input_shape, pool_size, conv_size, initial_learning_rate, mg
   if mgpu == 1:
     print('Compiling single GPU model')
     model = Model(inputs=inputs, outputs=act)
-    model.compile(optimizer=Adam(lr=initial_learning_rate), loss=dice_coef_loss,
+    model.compile(optimizer=Adam(learning_rate=initial_learning_rate), loss=dice_coef_loss,
                   metrics=[dice_coef])
     return model
   elif mgpu > 1:
     print('Compiling multi GPU model')
     model = Model(inputs=inputs, outputs=act)
     parallel_model = multi_gpu_model(model, gpus=mgpu)
-    parallel_model.compile(optimizer=Adam(lr=initial_learning_rate), loss=dice_coef_loss,
+    parallel_model.compile(optimizer=Adam(learning_rate=initial_learning_rate), loss=dice_coef_loss,
                            metrics=[dice_coef])
     return parallel_model
   else:

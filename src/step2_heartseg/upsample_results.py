@@ -143,8 +143,7 @@ def run_core(cur_input, crop_input, output_dir, pkl_data, inter_size, patient):
   interSpacing = imgSitk_512.GetSpacing()
 
   # upsample image
-  resFilter = sitk.ResampleImageFilter()
-  pred_sitk_288 = resFilter.Execute(pred_sitk_128, inter_size, sitk.Transform(), sitk.sitkLinear,
+  pred_sitk_288 = sitk.Resample(pred_sitk_128, inter_size, sitk.Transform(), sitk.sitkLinear,
                                     pred_sitk_128.GetOrigin(), interSpacing, pred_sitk_128.GetDirection(),
                                     0, pred_sitk_128.GetPixelIDValue())
 

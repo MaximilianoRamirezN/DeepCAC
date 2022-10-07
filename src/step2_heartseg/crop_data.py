@@ -152,14 +152,12 @@ def downsampleSitk(imagesRawSitk, final_spacing, final_size):
   final_spacing[0] = origSize[0]*origSpacing[0]/final_size[0]
   final_spacing[1] = origSize[1]*origSpacing[1]/final_size[1]
 
-  resFilter = sitk.ResampleImageFilter()
-
   for key in imagesRawSitk:
     if 'Img' in key:
       method = sitk.sitkLinear
     else:
       method = sitk.sitkNearestNeighbor
-    imagesRawSitk[key] = resFilter.Execute(imagesRawSitk[key],
+    imagesRawSitk[key] = sitk.Resample(imagesRawSitk[key],
                                            final_size,
                                            sitk.Transform(),
                                            method,

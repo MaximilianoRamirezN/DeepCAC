@@ -61,7 +61,7 @@ def run_inference(model_weights_dir_path, data_dir, output_dir,
 
   print("\nDeep Learning model inference using 4xGPUs:" )
   
-  mgpu = 4
+  mgpu = 1
 
   output_dir_npy = os.path.join(output_dir, 'npy')
   output_dir_png = os.path.join(output_dir, 'png')
@@ -82,7 +82,7 @@ def run_inference(model_weights_dir_path, data_dir, output_dir,
 
   testDataRaw = []
   for i in range(len(testFileHdf5.root.ID)):
-    patientID = testFileHdf5.root.ID[i]
+    patientID = testFileHdf5.root.ID[i].decode("utf-8")
     img = testFileHdf5.root.img[i]
     msk = testFileHdf5.root.msk[i]
     testDataRaw.append([patientID, img, msk])
@@ -91,7 +91,7 @@ def run_inference(model_weights_dir_path, data_dir, output_dir,
   imgsTrue = np.zeros((numData, training_size[2], training_size[1], training_size[0]), dtype=np.float64)
   msksTrue = np.zeros((numData, training_size[2], training_size[1], training_size[0]), dtype=np.float64)
 
-  for i in xrange(0, len(testDataRaw), mgpu):
+  for i in range(0, len(testDataRaw), mgpu):
     imgTest = np.zeros((mgpu, training_size[2], training_size[1], training_size[0]), dtype=np.float64)
 
     for j in range(mgpu):
