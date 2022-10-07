@@ -73,6 +73,7 @@ def test(model, dataDir, output_dir_npy, output_dir_png, pkl_file,
   num_test_imgs = len(testFileHdf5.root.ID)
   for i in range(num_test_imgs):
     patientID = testFileHdf5.root.ID[i]
+    patientID = patientID.decode("utf-8")
     img = testFileHdf5.root.img[i]
     if has_manual_seg:
       msk = testFileHdf5.root.msk[i]
@@ -90,7 +91,7 @@ def test(model, dataDir, output_dir_npy, output_dir_png, pkl_file,
   imgsTrue = np.zeros((numData, size, size, size), dtype=np.float64)
   msksTrue = np.zeros((numData, size, size, size), dtype=np.float64)
 
-  for i in xrange(0, len(testDataRaw) + 1, mgpu):
+  for i in range(0, len(testDataRaw) + 1, mgpu):
     imgTest = np.zeros((4, size, size, size), dtype=np.float64)
 
     for j in range(mgpu):
