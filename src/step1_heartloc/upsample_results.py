@@ -66,8 +66,9 @@ def run_core(patient):
   upSize = img_SITK_True_RAW.GetSize()
   upSpacing = img_SITK_True_RAW.GetSpacing()
 
-  resFilter = sitk.ResampleImageFilter()
-  msk_SITK_Pred_512 = resFilter.Execute(patient_SITK_Pred_112,
+  # resFilter = sitk.ResampleImageFilter()
+  # msk_SITK_Pred_512 = resFilter.Execute(patient_SITK_Pred_112,
+  msk_SITK_Pred_512 = sitk.Resample(patient_SITK_Pred_112,
                                         upSize,
                                         sitk.Transform(),
                                         sitk.sitkNearestNeighbor,
