@@ -163,17 +163,17 @@ def run_core(res_dict, raw_dir, crop_dir, mask, ag_div, nr_con_px, msk_thr, prd_
   nrrd_reader = sitk.ImageFileReader()
   patient_id = os.path.basename(prd_file).replace('_pred.npy', '')
 
-  print 'Processing patient', patient_id
+  print('Processing patient', patient_id)
 
   img_file = os.path.join(crop_dir, patient_id + '_img_3071.npy')
   if not os.path.exists(img_file) or not os.path.exists(prd_file):
-    print 'Error - IMG 3071 not found', patient_id
-    print img_file, '\n', prd_file
+    print('Error - IMG 3071 not found', patient_id)
+    print(img_file, '\n', prd_file)
     return
 
   nrrd_file = os.path.join(raw_dir, patient_id + '_img.nrrd')
   if not os.path.exists(nrrd_file):
-    print 'Error - IMG not found', patient_id, nrrd_file
+    print('Error - IMG not found', patient_id, nrrd_file)
     return
 
   img = np.load(img_file)
@@ -193,7 +193,7 @@ def run_core(res_dict, raw_dir, crop_dir, mask, ag_div, nr_con_px, msk_thr, prd_
   if mask:
     msk_file = os.path.join(crop_dir, patient_id + '_msk.npy')
     if not os.path.exists(msk_file):
-      print 'Error - MSK not found', patient_id, msk_file
+      print('Error - MSK not found', patient_id, msk_file)
       return
     msk = np.load(msk_file)
     cac_calc = round(get_ag(img, msk, nr_con_px, spacing, ag_div), 3)
@@ -213,7 +213,7 @@ def run_core(res_dict, raw_dir, crop_dir, mask, ag_div, nr_con_px, msk_thr, prd_
 
 if __name__ == "__main__":
  
-  print "\n--- STEP 4 - CAC SCORING ---\n"
+  print("\n--- STEP 4 - CAC SCORING ---\n")
    
   msk_thr = 0.1
   nr_con_px = 3
@@ -221,7 +221,7 @@ if __name__ == "__main__":
   
   step3_inferred_dir_path_npy = os.path.join(step3_inferred_dir_path, 'npy')
   pred_files = glob(step3_inferred_dir_path_npy + '/*.npy')
-  print 'Found', len(pred_files), 'patients under "%s"'%(step3_inferred_dir_path_npy)
+  print('Found', len(pred_files), 'patients under "%s"'%(step3_inferred_dir_path_npy))
 
   if num_cores == 1:
     res_dict = {}
@@ -246,10 +246,10 @@ if __name__ == "__main__":
       pool.join()
       res_dict = dict(res_dict)
 
-  print '\nSaving results to csv file under "%s"'%(cacscore_data_path)
+  print('\nSaving results to csv file under "%s"'%(cacscore_data_path))
   result_file = os.path.join(cacscore_data_path, 'cac_score_results.csv')
 
-  with open(result_file, 'wb') as csv_file:
+  with open(result_file, 'w') as csv_file:
     file_writer = csv.writer(csv_file, delimiter=',', quotechar='|', quoting = csv.QUOTE_MINIMAL)
     title = ['PatientID', 'Dice', 'CAC_calc', 'CAC_pred', 'Class_calc', 'Class_pred']
     file_writer.writerow(title)
@@ -261,4 +261,4 @@ if __name__ == "__main__":
 
   # Calculate mean dice
   mean_dice = sum([res_dict[x][0] for x in res_dict.keys()]) / len(res_dict)
-  print '\nMean Dice Score:', round(mean_dice, 2)
+  print('\nMean Dice Score:', round(mean_dice, 2))
