@@ -111,7 +111,7 @@ if not os.path.exists(model_output_nrrd_dir_path): os.mkdir(model_output_nrrd_di
 ## ----------------------------------------
 
 # run the localization pipeline
-print "\n--- STEP 1 - HEART LOCALIZATION ---\n"
+print("\n--- STEP 1 - HEART LOCALIZATION ---\n")
 
 # data preparation 
 export_data.export_data(raw_data_dir_path = raw_data_dir_path,

@@ -15,9 +15,9 @@ import os, math
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 import numpy as np
-import tensorflow
+import tensorflow as tf
 
-tensorflow.compat.v1.logging.set_verbosity(tensorflow.compat.v1.logging.ERROR)
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 from tensorflow.keras import utils
 from tensorflow.keras import Input
@@ -102,18 +102,18 @@ def get_unet_3d_4(input_shape, pool_size, conv_size, initial_learning_rate, mgpu
   act = Activation('sigmoid', name='act')(conv10)
 
   if mgpu == 1:
-    print 'Compiling single GPU model...'
+    print('Compiling single GPU model...')
     model = Model(inputs=inputs, outputs=act)
     model.compile(optimizer=Adam(lr=initial_learning_rate), loss=dice_coef_loss,
                   metrics=[dice_coef])
     return model
   elif mgpu > 1:
-    print 'Compiling multi GPU model...'
+    print('Compiling multi GPU model...')
     model = Model(inputs=inputs, outputs=act)
     parallel_model = multi_gpu_model(model, gpus=mgpu)
     parallel_model.compile(optimizer=Adam(lr=initial_learning_rate), loss=dice_coef_loss,
                            metrics=[dice_coef])
     return parallel_model
   else:
-    print 'ERROR Wrong number of GPUs defined'
+    print('ERROR Wrong number of GPUs defined')
     return

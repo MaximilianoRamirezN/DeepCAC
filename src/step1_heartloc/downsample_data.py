@@ -22,7 +22,7 @@ import os
 import sys
 import numpy as np
 import multiprocessing
-import cPickle as pickle
+import pickle
 import SimpleITK as sitk
 
 from glob import glob
@@ -65,10 +65,11 @@ def resample_sitk(data_sitk, new_spacing, method):
     - Output pixel type
   """
 
-  res_filter = sitk.ResampleImageFilter()
-  img_sitk = res_filter.Execute(data_sitk, [new_size, new_size, new_size], sitk.Transform(), method,
-                                data_sitk.GetOrigin(), [new_spacing, new_spacing, new_spacing],
-                                data_sitk.GetDirection(), 0, data_sitk.GetPixelIDValue())
+  # res_filter = sitk.ResampleImageFilter()
+  # img_sitk = res_filter.Execute(data_sitk, [new_size, new_size, new_size], sitk.Transform(), method,
+                                # data_sitk.GetOrigin(), [new_spacing, new_spacing, new_spacing],
+                                # data_sitk.GetDirection(), 0, data_sitk.GetPixelIDValue())
+  img_sitk = sitk.Resample(data_sitk, [new_size, new_size, new_size], sitk.Transform(), method, data_sitk.GetOrigin(), [new_spacing, new_spacing, new_spacing], data_sitk.GetDirection(), 0, data_sitk.GetPixelIDValue())
   
   return img_sitk, orig_size, orig_spacing
 
@@ -196,14 +197,14 @@ def run_core(resampled_dir_path, crop_size, new_spacing, has_manual_seg, result_
   patient_id = os.path.basename(img_file).replace('_img.nrrd', '')
   img_out_file = os.path.join(resampled_dir_path, patient_id + '_img.nrrd')
 
-  print 'Processing patient', patient_id
+  print('Processing patient', patient_id)
 
   # read the patient image data
   try:
     nrrd_reader.SetFileName(img_file)
     img_sitk = nrrd_reader.Execute()
   except:
-    print 'EXCEPTION: Unable to read NRRD image file for patient', patient_id
+    print('EXCEPTION: Unable to read NRRD image file for patient', patient_id)
     return
 
   # downsample CT data
@@ -218,9 +219,9 @@ def run_core(resampled_dir_path, crop_size, new_spacing, has_manual_seg, result_
 
   # sanity checks on the size and spacing of the resulting image
   if not (crop_size, crop_size, crop_size) == final_size_img:
-    print 'Wrong final IMG size', patient_id, final_size_img
+    print('Wrong final IMG size', patient_id, final_size_img)
   if not (new_spacing, new_spacing, new_spacing) == final_spacing_img:
-    print 'Wrong final IMG spacing', patient_id, final_spacing_img
+    print('Wrong final IMG spacing', patient_id, final_spacing_img)
 
   # if everything is all right, save the downsampled and resized CT image as *.nrrd
   save_nrrd(data_sitk = img_sitk, outfile_path = img_out_file)
@@ -240,7 +241,7 @@ def run_core(resampled_dir_path, crop_size, new_spacing, has_manual_seg, result_
         nrrd_reader.SetFileName(msk_file)
         msk_sitk = nrrd_reader.Execute()
       except Exception as e:
-        print 'EXCEPTION: Unable to read NRRD mask file for patient', patient_id, e
+        print('EXCEPTION: Unable to read NRRD mask file for patient', patient_id, e)
         return
 
       # downsample segmask data
@@ -260,18 +261,18 @@ def run_core(resampled_dir_path, crop_size, new_spacing, has_manual_seg, result_
       # FIXME: try-except instead of returns?
       # sanity checks on the size and spacing of the original mask
       if not tuple(np.round(orig_size_img, 1)) == tuple(np.round(orig_size_mask, 1)):
-        print 'Wrong original MSK size', patient_id, tuple(np.round(orig_size_img, 1)), tuple(np.round(orig_size_mask, 1))
+        print('Wrong original MSK size', patient_id, tuple(np.round(orig_size_img, 1)), tuple(np.round(orig_size_mask, 1)))
         return
       if not tuple(np.round(orig_spacing_img, 1)) == tuple(np.round(orig_spacing_mask, 1)):
-        print 'Wrong original MSK spacing', patient_id, tuple(np.round(orig_spacing_img, 1)), tuple(np.round(orig_spacing_mask, 1))
+        print('Wrong original MSK spacing', patient_id, tuple(np.round(orig_spacing_img, 1)), tuple(np.round(orig_spacing_mask, 1)))
         return
 
       # sanity checks on the size and spacing of the resulting mask
       if not tuple(np.round(final_size_img, 1)) == tuple(np.round(final_size_mask, 1)):
-        print 'Wrong final MSK size', patient_id, tuple(np.round(final_size_img, 1)), tuple(np.round(final_size_mask, 1))
+        print('Wrong final MSK size', patient_id, tuple(np.round(final_size_img, 1)), tuple(np.round(final_size_mask, 1)))
         return
       if not tuple(np.round(final_spacing_mask, 1)) == tuple(np.round(final_spacing_mask, 1)):
-        print 'Wrong final MSK spacing', patient_id, tuple(np.round(final_spacing_img, 1)), tuple(np.round(final_spacing_mask, 1))
+        print('Wrong final MSK spacing', patient_id, tuple(np.round(final_spacing_img, 1)), tuple(np.round(final_spacing_mask, 1)))
         return
     # if the mask file does not exist (has_manual_seg == True, so it should), return
     else:
@@ -311,11 +312,11 @@ def downsample_data(curated_dir_path, resampled_dir_path, model_input_dir_path,
 
   """
   
-  print "\nData downsampling:"
+  print("\nData downsampling:")
   
   img_files = glob(curated_dir_path + '/*_img.nrrd')
   
-  print 'Found', len(img_files), 'patients under "%s" folder.'%(curated_dir_path)
+  print('Found', len(img_files), 'patients under "%s" folder.'%(curated_dir_path))
 
   # if single core, then run core as one would normally do with a function
   if num_cores == 1:
@@ -338,12 +339,12 @@ def downsample_data(curated_dir_path, resampled_dir_path, model_input_dir_path,
       pool.join()
       result_dict = dict(result_dict)
   else:
-    print 'Wrong number of CPU cores specified in the config file.'
+    print('Wrong number of CPU cores specified in the config file.')
     sys.exit()
 
   # save pkl file for image properties
   results_file_name = os.path.join(model_input_dir_path, 'step1_downsample_results.pkl')
   
-  print 'Saving results dictionary...'
+  print('Saving results dictionary...')
   with open(results_file_name, 'wb') as results_file:
     pickle.dump(result_dict, results_file, pickle.HIGHEST_PROTOCOL)

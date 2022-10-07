@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 
 from scipy.ndimage import measurements
 
-import heartloc_model
+import step1_heartloc.heartloc_model as heartloc_model
 
 def save_png(patientID, output_dir_png, img, msk, pred):
   maskIndicesMsk = np.where(msk != 0)
@@ -97,7 +97,7 @@ def test(model, dataDir, output_dir_npy, output_dir_png, pkl_file,
       # If the number of test images is not mod 4 == 0, just redo the last file severall times
       patientIndex = min(len(testDataRaw) - 1, i + j)
       patientID = testDataRaw[patientIndex][0]
-      print 'Processing patient', patientID
+      print('Processing patient', patientID)
       # Store data for score calculation
       imgsTrue[patientIndex, :, :, :] = testDataRaw[patientIndex][1]
       msksTrue[patientIndex, :, :, :] = testDataRaw[patientIndex][2]
@@ -122,9 +122,9 @@ def test(model, dataDir, output_dir_npy, output_dir_png, pkl_file,
 def run_inference(model_output_dir_path, model_input_dir_path, model_weights_dir_path,
                   crop_size, export_png, model_down_steps, extended, has_manual_seg, weights_file_name):
 
-  print "\nDeep Learning model inference using 4xGPUs:" 
+  print("\nDeep Learning model inference using 4xGPUs:" )
   
-  mgpu = 4
+  mgpu = 1
 
   output_dir_npy = os.path.join(model_output_dir_path, 'npy')
   output_dir_png = os.path.join(model_output_dir_path, 'png')
@@ -138,7 +138,7 @@ def run_inference(model_output_dir_path, model_input_dir_path, model_weights_dir
 
   weights_file = os.path.join(model_weights_dir_path, weights_file_name)
 
-  print 'Loading saved model from "%s"'%(weights_file)
+  print('Loading saved model from "%s"'%(weights_file))
   
   input_shape = (crop_size, crop_size, crop_size, 1)
   model = heartloc_model.get_unet_3d(down_steps = model_down_steps,
