@@ -24,15 +24,15 @@ from skimage.io import imsave
 from skimage.transform import resize
 from scipy.ndimage import rotate, measurements
 
-from tensorflow.python.keras import backend as K
-from tensorflow.python.keras.optimizers import Adam
-from tensorflow.python.keras.utils import plot_model
-from tensorflow.python.keras.models import Model, load_model
-from tensorflow.python.keras.callbacks import ModelCheckpoint
-from tensorflow.python.keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
+from tensorflow.keras import backend as K
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.utils import plot_model
+from tensorflow.keras.models import Model, load_model
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose
 
-import cacseg_model
-from load_test_data import load_test_data
+import step3_cacseg.cacseg_model as cacseg_model
+from step3_cacseg.load_test_data import load_test_data
 
 
 def getCubes(img, msk, cube_size):
@@ -126,7 +126,7 @@ def export_png(patient_id, img, msk, prd, th, output_dir_png):
 
 def test(model, patient_data, cube_size, output_dir_npy, output_dir_png, th, export_cac_slices_png):
   patient_id = patient_data[0]
-  print "Processing patient", patient_id
+  print("Processing patient", patient_id)
   img = patient_data[1]
   msk = patient_data[2]
 
@@ -157,7 +157,7 @@ def test(model, patient_data, cube_size, output_dir_npy, output_dir_png, th, exp
 def run_inference(data_dir, model_weights_dir_path, weights_file_name,
                   output_dir, export_cac_slices_png, has_manual_seg):
   
-  print "\nDeep Learning model inference using 4xGPUs:" 
+  print("\nDeep Learning model inference using 4xGPUs:" )
   
   # hard-coded model parameters
   th = 0.9
@@ -172,7 +172,7 @@ def run_inference(data_dir, model_weights_dir_path, weights_file_name,
   optimizer = 'ADAM'
   extended = True
   drop_out = 0.5
-  mgpu = 4
+  mgpu = 1
   lr = 0.0001
   lr_drop = 0.7
   drop_epochs = 100
@@ -200,9 +200,9 @@ def run_inference(data_dir, model_weights_dir_path, weights_file_name,
   weights_file = os.path.join(model_weights_dir_path, weights_file_name)
 
   test_data = load_test_data(data_dir, mask = has_manual_seg)
-  print 'Found', len(test_data), 'patients under "%s"'%(data_dir)
+  print('Found', len(test_data), 'patients under "%s"'%(data_dir))
 
-  print 'Loading saved model from "%s"'%(weights_file)
+  print('Loading saved model from "%s"'%(weights_file))
   
   model = cacseg_model.getUnet3d(down_steps = down_steps, input_shape = input_shape, pool_size = pool_size,
                                  conv_size = conv_size, initial_learning_rate = lr, mgpu = mgpu,
