@@ -104,7 +104,7 @@ def get_unet_3d_4(input_shape, pool_size, conv_size, initial_learning_rate, mgpu
   if mgpu == 1:
     print('Compiling single GPU model...')
     model = Model(inputs=inputs, outputs=act)
-    model.compile(optimizer=Adam(lr=initial_learning_rate), loss=dice_coef_loss,
+    model.compile(optimizer=Adam(learning_rate=initial_learning_rate), loss=dice_coef_loss,
                   metrics=[dice_coef])
     return model
   elif mgpu > 1:
