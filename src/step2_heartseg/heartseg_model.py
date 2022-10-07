@@ -16,13 +16,12 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
-from tensorflow.python.keras.utils import *
-from tensorflow.python.keras.engine import Input
-from tensorflow.python.keras import backend as K
-from tensorflow.python.keras.optimizers import Adam
-from tensorflow.python.keras.models import load_model, Model
-from tensorflow.python.keras.layers.merge import concatenate
-from tensorflow.python.keras.layers import Conv3D, MaxPooling3D, UpSampling3D, Activation, BatchNormalization, Dropout
+from tensorflow.keras.utils import *
+from tensorflow.keras import Input
+from tensorflow.keras import backend as K
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.models import load_model, Model
+from tensorflow.keras.layers import Conv3D, MaxPooling3D, UpSampling3D, Activation, BatchNormalization, Dropout, concatenate
 
 
 def dice_coef(y_true, y_pred, smooth=1.):
