@@ -1,3 +1,16 @@
+# Update to Python3
+Attempt to migrate DeepCAC to run with Python 3 on Ubuntu 22.04.
+
+Steps performed for the migration:
+1. Install dependencies in up-to-date version (see requirements)
+2. Update `print` statements and `xrange` to `range`
+3. Change `cPickle` import to `pickle`
+4. Update usage of SimpleITK. See https://stackoverflow.com/questions/72072305/migrating-simpleitk-1-x-to-2-x
+5. Run tensorflow update script `tf_upgrade_v2 ` (see https://www.tensorflow.org/guide/migrate) and make manual updates according to the generated report
+6. Use custom model weights conversion scripts (e.g. `conv_model_weights_step1.py`) as the format seems to have changed
+7. Set mgpu to 1 in every case
+8. Changes for byte/string conversion
+
 # DeepCAC
 
 Fully automatic coronary calcium risk assessment using Deep Learning. This 
@@ -91,3 +104,5 @@ Armato III, SG; McLennan, G; Bidaut, L; McNitt-Gray, MF; Meyer, CR; Reeves, AP; 
 Armato SG 3rd, McLennan G, Bidaut L, McNitt-Gray MF, Meyer CR, Reeves AP, Zhao B, Aberle DR, Henschke CI, Hoffman EA, Kazerooni EA, MacMahon H, Van Beeke EJ, Yankelevitz D, Biancardi AM, Bland PH, Brown MS, Engelmann RM, Laderach GE, Max D, Pais RC, Qing DP, Roberts RY, Smith AR, Starkey A, Batrah P, Caligiuri P, Farooqi A, Gladish GW, Jude CM, Munden RF, Petkovska I, Quint LE, Schwartz LH, Sundaram B, Dodd LE, Fenimore C, Gur D, Petrick N, Freymann J, Kirby J, Hughes B, Casteele AV, Gupte S, Sallamm M, Heath MD, Kuhn MH, Dharaiya E, Burns R, Fryd DS, Salganicoff M, Anand V, Shreter U, Vastagh S, Croft BY.  The Lung Image Database Consortium (LIDC) and Image Database Resource Initiative (IDRI): A completed reference database of lung nodules on CT scans. Medical Physics, 38: 915--931, 2011. DOI: https://doi.org/10.1118/1.3528204
 
 Clark K, Vendt B, Smith K, Freymann J, Kirby J, Koppel P, Moore S, Phillips S, Maffitt D, Pringle M, Tarbox L, Prior F. (2013) The Cancer Imaging Archive (TCIA): Maintaining and Operating a Public Information Repository, Journal of Digital Imaging, Volume 26, Number 6, pp 1045-1057. DOI: https://doi.org/10.1007/s10278-013-9622-7
+
+
