@@ -13,7 +13,7 @@
 import os
 import tables
 import numpy as np
-import heartseg_model
+import step2_heartseg.heartseg_model as heartseg_model
 import matplotlib.pyplot as plt
 
 
@@ -59,7 +59,7 @@ def save_png(patientID, output_dir_png, img, msk, pred):
 def run_inference(model_weights_dir_path, data_dir, output_dir,
                   weights_file_name, export_png, final_size, training_size, down_steps):
 
-  print "\nDeep Learning model inference using 4xGPUs:" 
+  print("\nDeep Learning model inference using 4xGPUs:" )
   
   mgpu = 4
 
@@ -73,7 +73,7 @@ def run_inference(model_weights_dir_path, data_dir, output_dir,
   inputShape = (training_size[2], training_size[1], training_size[0], 1)
   model = heartseg_model.getUnet3d(down_steps=down_steps, input_shape=inputShape, mgpu=mgpu, ext=True)
 
-  print 'Loading saved model from "%s"'%(model_weights_dir_path)
+  print('Loading saved model from "%s"'%(model_weights_dir_path))
   weights_file = os.path.join(model_weights_dir_path, weights_file_name)
   model.load_weights(weights_file)
 
@@ -98,7 +98,7 @@ def run_inference(model_weights_dir_path, data_dir, output_dir,
       patientIndex = min(len(testDataRaw) - 1, i + j)
 
       patientID = testDataRaw[patientIndex][0]
-      print 'Processing patient', patientID
+      print('Processing patient', patientID)
       # Store data for score calculation
       imgsTrue[patientIndex, 0:img.shape[0], :, :] = testDataRaw[patientIndex][1]
       msksTrue[patientIndex, 0:img.shape[0], :, :] = testDataRaw[patientIndex][2]
