@@ -7,7 +7,7 @@ import yaml
 
 import step2_heartseg.heartseg_model as heartseg_model
 
-weights_file = "../data/step2_heartseg/model_weights/step2_heartseg_model_weights.hdf5"
+filename_weights = "../data/step2_heartseg/model_weights/step2_heartseg_model_weights.hdf5"
 
 conf = "./step2_heart_segmentation.yaml"
 base_conf_file_path = 'config/'
@@ -25,8 +25,9 @@ mgpu = 1
 inputShape = (training_size[2], training_size[1], training_size[0], 1)
 model = heartseg_model.getUnet3d(down_steps=down_steps, input_shape=inputShape, mgpu=mgpu, ext=True)
 
-weights = h5py.File(weights_file, mode="r")
-weights = weights["model_1"]
+
+file_weights = h5py.File(filename_weights, mode="r")
+weights = file_weights["model_1"]
 
 def set_conv_weights(layer, weights):
     bias = np.array(weights["bias:0"])
@@ -60,4 +61,5 @@ for layer in model.layers:
     layer_weights = weights[name]
     set_weights[type(layer)](layer, layer_weights)
 
-model.save(weights_file, save_format="h5")
+file_weights.close()
+model.save(filename_weights, save_format="h5")

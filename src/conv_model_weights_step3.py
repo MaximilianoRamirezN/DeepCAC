@@ -7,7 +7,7 @@ import yaml
 
 import step3_cacseg.cacseg_model as cacseg_model
 
-weights_file = "../data/step3_cacseg/model_weights/step3_cacseg_model_weights.hdf5"
+filename_weights = "../data/step3_cacseg/model_weights/step3_cacseg_model_weights.hdf5"
 
 mgpu = 1
 down_steps = 3  
@@ -23,8 +23,8 @@ model = cacseg_model.getUnet3d(down_steps = down_steps, input_shape = input_shap
                                  conv_size = conv_size, initial_learning_rate = lr, mgpu = mgpu,
                                  extended = extended, drop_out = drop_out, optimizer = optimizer)
 
-weights = h5py.File(weights_file, mode="r")
-weights = weights["model_1"]
+file_weights = h5py.File(filename_weights, mode="r")
+weights = file_weights["model_1"]
 
 def set_conv_weights(layer, weights):
     bias = np.array(weights["bias:0"])
@@ -58,4 +58,5 @@ for layer in model.layers:
     layer_weights = weights[name]
     set_weights[type(layer)](layer, layer_weights)
 
-model.save(weights_file, save_format="h5")
+file_weights.close()
+model.save(filename_weights, save_format="h5")

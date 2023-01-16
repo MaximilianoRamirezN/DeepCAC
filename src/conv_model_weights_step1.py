@@ -25,9 +25,9 @@ input_shape = (crop_size, crop_size, crop_size, 1)
 model = heartloc_model.get_unet_3d(down_steps = down_steps, input_shape = input_shape, mgpu = mgpu, ext = extended)
 
 
-weights_file = "../data/step1_heartloc/model_weights/step1_heartloc_model_weights.hdf5"
-weights = h5py.File(weights_file, mode="r")
-weights = weights["model_1"]
+filename_weights = "../data/step1_heartloc/model_weights/step1_heartloc_model_weights.hdf5"
+file_weights = h5py.File(filename_weights, mode="r")
+weights = file_weights["model_1"]
 
 for layer in model.layers:
     name = layer.name
@@ -46,4 +46,6 @@ for layer in model.layers:
     kernel = np.array(layer_weights["kernel:0"])
     layer.set_weights([kernel, bias])
 
-model.save(weights_file, save_format="h5")
+file_weights.close()
+
+model.save(filename_weights, save_format="h5")
