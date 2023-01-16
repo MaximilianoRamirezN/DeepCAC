@@ -468,3 +468,23 @@ def center_pad(
             _padding = (math.ceil(diff_h), math.floor(diff_h))
         padding.append(_padding)
     return np.pad(img, padding, mode="constant", constant_values=constant)
+
+
+def window(image: np.ndarray, center: int = 40, width: int = 380) -> np.ndarray:
+    """
+    Perform windowing on a CT image to display it.
+
+    Parameters
+    ----------
+    image: np.ndarray
+        the CT image
+    center: int
+        the window center
+    width: width
+        the window width
+
+    Returns
+    -------
+    np.ndarray
+    """
+    return np.clip(image, center - width // 2, center + width // 2)
