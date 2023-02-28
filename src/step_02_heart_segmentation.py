@@ -22,7 +22,7 @@ def heart_segmentation(
     heartloc_sitk: SITKImage,
     input_spacing: List[int] = [2.04, 2.04, 2.5],
     input_size: List[int] = [112, 128, 128],
-    model_weights: str = "../data/step2_heartseg/model_weights/step2_heartseg_model_weights.hdf5",
+    model_weights: str = "data/step2_heartseg/model_weights/step2_heartseg_model_weights.hdf5",
 ) -> SITKImage:
     """
     Perform the second step of the DeepCAC pipeline - heart segmentation.

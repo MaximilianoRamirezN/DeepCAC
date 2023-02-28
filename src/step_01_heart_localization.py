@@ -20,7 +20,7 @@ def heart_localization(
     img_sitk: SITKImage,
     input_spacing: List[int] = [3.0, 3.0, 3.0],
     input_size: List[int] = [112, 112, 112],
-    model_weights: str = "../data/step1_heartloc/model_weights/step1_heartloc_model_weights.hdf5",
+    model_weights: str = "data/step1_heartloc/model_weights/step1_heartloc_model_weights.hdf5",
 ) -> SITKImage:
     """
     Perform the first step of the DeepCAC pipeline - a rough heart segmentation.

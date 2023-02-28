@@ -24,7 +24,7 @@ from step2_heartseg import compute_bbox, crop_data, input_data_prep, run_inferen
 
 ## ----------------------------------------
 
-base_conf_file_path = 'config/'
+base_conf_file_path = 'src/config/'
 conf_file_list = [f for f in os.listdir(base_conf_file_path) if f.split('.')[-1] == 'yaml']
 
 parser = argparse.ArgumentParser(description = 'Run pipeline step 2 - heart segmentation.')

@@ -26,7 +26,7 @@ def cac_segmentation(
     heartseg_sitk: SITKImage,
     input_spacing: List[int] = [0.68, 0.68, 2.5],
     cube_size: List[int] = [32, 64, 64],
-    model_weights: str = "../data/step3_cacseg/model_weights/step3_cacseg_model_weights.hdf5",
+    model_weights: str = "data/step3_cacseg/model_weights/step3_cacseg_model_weights.hdf5",
 ):
     """
     Perform the third step of the DeepCAC pipeline - CAC segmentation.

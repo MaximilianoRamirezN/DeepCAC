@@ -28,7 +28,7 @@ from multiprocessing import Pool, Manager
 
 ## ----------------------------------------
 
-base_conf_file_path = 'config/'
+base_conf_file_path = 'src/config/'
 conf_file_list = [f for f in os.listdir(base_conf_file_path) if f.split('.')[-1] == 'yaml']
 
 parser = argparse.ArgumentParser(description = 'Run pipeline step 4 - CAC scoring.')
