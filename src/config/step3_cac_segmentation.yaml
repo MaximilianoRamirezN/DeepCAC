@@ -45,13 +45,13 @@ io:
 
 processing:
   # whether or not the segmentation masks are available
-  has_manual_seg: true
+  has_manual_seg: false #true
     
   # whether or not png images for quality control should be exported
   export_png: true
   
   # whether or not a png image *FOR EACH SLICE* containing CAC should be exported for quality control
-  export_cac_slices_png: false
+  export_cac_slices_png: true #false
   
   # number of CPU cores to be used
   num_cores: 1

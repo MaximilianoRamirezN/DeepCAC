@@ -32,7 +32,7 @@ io:
 
 processing:
   # whether or not the segmentation masks are available
-  has_manual_seg: true
+  has_manual_seg: false #true
       
   # number of CPU cores to be used
   num_cores: 1

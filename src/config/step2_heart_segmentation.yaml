@@ -48,7 +48,7 @@ io:
 
 processing:
   # whether or not the segmentation masks are available
-  has_manual_seg: true
+  has_manual_seg: false #true
   
   # whether or not holes in segmentation masks should be filled
   fill_mask_holes: true
